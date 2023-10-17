@@ -5,7 +5,7 @@ from selenium.webdriver.common.by import By
 from bs4 import BeautifulSoup
 
 
-# Does the entire reaction test once it's started
+# Does the reaction test
 def reaction():
     browser = webdriver.Firefox()
     url = "https://humanbenchmark.com/tests/reactiontime"
@@ -32,28 +32,42 @@ def reaction():
 def sequenceMemory():
     print("What score do you want to stop at?")
     targetScore = input("> ")
-    litPixel = (255, 255, 255)
-    squareCoordinates = [[780, 390], [950, 390], [1100, 390],
-                         [780, 550], [950, 550], [1100, 550],
-                         [780, 720], [950, 720], [1100, 720]]
 
+    # Open browser
+    browser = webdriver.Firefox()
+    url = "https://humanbenchmark.com/tests/sequence"
+    browser.get(url)
+    pyautogui.sleep(6)
+
+    # Click start button
+    element = browser.find_element(By.XPATH, "/html/body/div/div/div[4]/div[1]/div/div/div/div[2]/button")
+    element.click()
+
+    # Loops for user specified amount of rounds
     for i in range(1, int(targetScore) + 1):
-        buttonList = []
+        squareList = []
         moveCount = 0
         while moveCount < i:
-            for j in range(9):
-                if pyautogui.pixelMatchesColor(squareCoordinates[j][0], squareCoordinates[j][1], litPixel):
-                    buttonList.append(j)
+            while True:
+                try:
+                    activeEntities = browser.find_elements(By.CLASS_NAME, "active")
+
+                    # Check to make sure it's a different active square
+                    if len(squareList) > 0:
+                        while activeEntities[1] == squareList[-1]:
+                            activeEntities = browser.find_elements(By.CLASS_NAME, "active")
+
+                    # Add the square to a list to be clicked later
+                    squareList.append(activeEntities[1])
                     moveCount += 1
-                    while pyautogui.pixelMatchesColor(squareCoordinates[j][0], squareCoordinates[j][1], litPixel):
-                        pass
+                    break
+                except IndexError:
+                    pass
 
-        # Once all the squares have been shown, click them again
-        for j in range(i):
-            pyautogui.click(squareCoordinates[buttonList[j]][0], squareCoordinates[buttonList[j]][1])
-
-        # Prevents duplicate detection
-        pyautogui.sleep(.1)
+        # Click all the stored squares
+        pyautogui.sleep(.75)
+        for square in squareList:
+            square.click()
 
 
 # Starts aimTrainer 5 seconds after being called
@@ -91,7 +105,7 @@ def aimTrainer():
                 yValue += 9
 
 
-# This one uses Selenium, so it opens automatically
+# Plays number memory up to user specified amount
 def numberMemory():
     print("What score do you want to stop at?")
     targetScore = input("> ")
