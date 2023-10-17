@@ -7,15 +7,25 @@ from bs4 import BeautifulSoup
 
 # Does the entire reaction test once it's started
 def reaction():
-    print("\nWaiting for green")
+    browser = webdriver.Firefox()
+    url = "https://humanbenchmark.com/tests/reactiontime"
+    browser.get(url)
+    pyautogui.sleep(10)
 
-    for i in range(5):
+    background = browser.find_element(By.CLASS_NAME, "view-splash")
+    background.click()
+
+    for _ in range(5):
         while True:
-            if pyautogui.pixelMatchesColor(1620, 420, (75, 219, 106)):
-                pyautogui.click(320, 420)
-                pyautogui.sleep(.5)
-                pyautogui.click(320, 420)
+            try:
+                background = browser.find_element(By.CLASS_NAME, "view-go")
+                background.click()
+                pyautogui.sleep(.1)
+                background = browser.find_element(By.CLASS_NAME, "view-result")
+                background.click()
                 break
+            except exceptions.NoSuchElementException:
+                pass
 
 
 # Does sequence memory up to the user specified amount
@@ -97,7 +107,7 @@ def numberMemory():
     element.click()
 
     # Loop of Number Memory
-    for z in range(int(targetScore)):
+    for _ in range(int(targetScore)):
         # Grab number
         pyautogui.sleep(1)
         page_source = browser.page_source
