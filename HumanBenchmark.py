@@ -83,6 +83,9 @@ def aimTrainer():
 
 # This one uses Selenium, so it opens automatically
 def numberMemory():
+    print("What score do you want to stop at?")
+    targetScore = input("> ")
+
     # Open a selenium browser to the test
     browser = webdriver.Firefox()
     url = "https://humanbenchmark.com/tests/number-memory"
@@ -94,7 +97,7 @@ def numberMemory():
     element.click()
 
     # Loop of Number Memory
-    while True:
+    for z in range(int(targetScore)):
         # Grab number
         pyautogui.sleep(1)
         page_source = browser.page_source
