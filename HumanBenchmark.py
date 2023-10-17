@@ -20,79 +20,29 @@ def reaction():
 
 # Does sequence memory up to the user specified amount
 def sequenceMemory():
-    pass
     print("What score do you want to stop at?")
     targetScore = input("> ")
     litPixel = (255, 255, 255)
+    squareCoordinates = [[780, 390], [950, 390], [1100, 390],
+                         [780, 550], [950, 550], [1100, 550],
+                         [780, 720], [950, 720], [1100, 720]]
 
     for i in range(1, int(targetScore) + 1):
         buttonList = []
         moveCount = 0
         while moveCount < i:
-            # Checks if a next move has happened, save it, and wait til the next move might start
-            moveCount += 1
-            if pyautogui.pixelMatchesColor(780, 390, litPixel):
-                buttonList.append(1)
-                while pyautogui.pixelMatchesColor(780, 390, litPixel):
-                    pass
-            elif pyautogui.pixelMatchesColor(950, 390, litPixel):
-                buttonList.append(2)
-                while pyautogui.pixelMatchesColor(950, 390, litPixel):
-                    pass
-            elif pyautogui.pixelMatchesColor(1100, 390, litPixel):
-                buttonList.append(3)
-                while pyautogui.pixelMatchesColor(1100, 390, litPixel):
-                    pass
-            elif pyautogui.pixelMatchesColor(780, 550, litPixel):
-                buttonList.append(4)
-                while pyautogui.pixelMatchesColor(780, 550, litPixel):
-                    pass
-            elif pyautogui.pixelMatchesColor(950, 550, litPixel):
-                buttonList.append(5)
-                while pyautogui.pixelMatchesColor(950, 550, litPixel):
-                    pass
-            elif pyautogui.pixelMatchesColor(1100, 550, litPixel):
-                buttonList.append(6)
-                while pyautogui.pixelMatchesColor(1100, 550, litPixel):
-                    pass
-            elif pyautogui.pixelMatchesColor(780, 720, litPixel):
-                buttonList.append(7)
-                while pyautogui.pixelMatchesColor(780, 720, litPixel):
-                    pass
-            elif pyautogui.pixelMatchesColor(950, 720, litPixel):
-                buttonList.append(8)
-                while pyautogui.pixelMatchesColor(950, 720, litPixel):
-                    pass
-            elif pyautogui.pixelMatchesColor(1100, 720, litPixel):
-                buttonList.append(9)
-                while pyautogui.pixelMatchesColor(1100, 720, litPixel):
-                    pass
-            else:
-                moveCount -= 1
+            for j in range(9):
+                if pyautogui.pixelMatchesColor(squareCoordinates[j][0], squareCoordinates[j][1], litPixel):
+                    buttonList.append(j)
+                    moveCount += 1
+                    while pyautogui.pixelMatchesColor(squareCoordinates[j][0], squareCoordinates[j][1], litPixel):
+                        pass
 
         # Once all the squares have been shown, click them again
         for j in range(i):
-            match buttonList[j]:
-                case 1:
-                    pyautogui.click(780, 390)
-                case 2:
-                    pyautogui.click(950, 390)
-                case 3:
-                    pyautogui.click(1100, 390)
-                case 4:
-                    pyautogui.click(780, 550)
-                case 5:
-                    pyautogui.click(950, 550)
-                case 6:
-                    pyautogui.click(1100, 550)
-                case 7:
-                    pyautogui.click(780, 720)
-                case 8:
-                    pyautogui.click(950, 720)
-                case 9:
-                    pyautogui.click(1100, 720)
+            pyautogui.click(squareCoordinates[buttonList[j]][0], squareCoordinates[buttonList[j]][1])
 
-        # Prevents a duplicate detection
+        # Prevents duplicate detection
         pyautogui.sleep(.1)
 
 
