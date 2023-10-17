@@ -19,7 +19,6 @@ def reaction():
 
 
 # Does sequence memory up to the user specified amount
-# TODO: Fix multiple detections in a tick
 def sequenceMemory():
     pass
     print("What score do you want to stop at?")
@@ -93,6 +92,9 @@ def sequenceMemory():
                 case 9:
                     pyautogui.click(1100, 720)
 
+        # Prevents a duplicate detection
+        pyautogui.sleep(.1)
+
 
 # Starts aimTrainer 5 seconds after being called
 def aimTrainer():
@@ -129,6 +131,7 @@ def aimTrainer():
 
 
 # This one uses Selenium, so it opens automatically
+# TODO: Make second number type correctly
 def numberMemory():
     # Open a selenium browser to the test
     browser = webdriver.Firefox()
