@@ -1,5 +1,5 @@
-# Write your code here :-)
 import pyautogui
+from selenium.common import exceptions
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from bs4 import BeautifulSoup
@@ -55,12 +55,13 @@ def aimTrainer():
         pyautogui.sleep(2)
         return
 
+    # Start game
     pyautogui.click(950, 500)
 
     count = 0
     while True:
         ss = pyautogui.screenshot(region=(210, 250, 1500, 500))
-        # Check if over
+        # Check if game is over
         if ss.getpixel((720, 460)) == (255, 209, 84):
             break
 
@@ -81,7 +82,6 @@ def aimTrainer():
 
 
 # This one uses Selenium, so it opens automatically
-# TODO: Make second number type correctly
 def numberMemory():
     # Open a selenium browser to the test
     browser = webdriver.Firefox()
@@ -101,14 +101,21 @@ def numberMemory():
         soup = BeautifulSoup(page_source, 'html.parser')
         number = soup.find(class_='big-number')
 
-        # Type number
-        pyautogui.sleep(5)
-        pyautogui.typewrite(number)
-        pyautogui.sleep(.1)
-        pyautogui.press('enter')
+        # Wait for and find the input box
+        boxFound = False
+        inputBox = None
+        while not boxFound:
+            try:
+                inputBox = browser.find_element(By.TAG_NAME, "input")
+                boxFound = True
+            except exceptions.NoSuchElementException:
+                pass
 
-        # Click next
-        pyautogui.sleep(.5)
+        # Type and submit number
+        inputBox.send_keys(number)
+        inputBox.send_keys(webdriver.Keys.RETURN)
+
+        # Hit next for the next number
         elements = browser.find_elements(By.TAG_NAME, "Button")
         elements[1].click()
 
