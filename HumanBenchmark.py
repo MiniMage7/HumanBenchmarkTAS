@@ -81,9 +81,9 @@ def aimTrainer():
 
     count = 0
     while True:
-        ss = pyautogui.screenshot(region=(210, 250, 1500, 500))
-        # Check if game is over
-        if ss.getpixel((720, 460)) == (255, 209, 84):
+        ss = pyautogui.screenshot(region=(350, 250, 1200, 500))
+        # Check if game is over 930, 710
+        if ss.getpixel((580, 460)) == (255, 209, 84):
             break
 
         xValue = 0
@@ -91,13 +91,13 @@ def aimTrainer():
         while True:
             # Check if the pixel is the target
             if ss.getpixel((xValue, yValue)) == (149, 195, 232):
-                pyautogui.click(xValue + 210, yValue + 250)
+                pyautogui.click(xValue + 350, yValue + 250)
                 count += 1
                 break
 
             # Move to another spot on the screen
             xValue += 9
-            if xValue > 1490:
+            if xValue > 1200:
                 xValue = 0
                 yValue += 9
 
