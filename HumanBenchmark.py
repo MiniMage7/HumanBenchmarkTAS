@@ -143,6 +143,35 @@ def numberMemory():
         elements[1].click()
 
 
+# Plays verbal memory up to user specified amount
+def verbalMemory():
+    print("What score do you want to stop at?")
+    targetScore = input("> ")
+
+    browser.get("https://humanbenchmark.com/tests/verbal-memory")
+    pyautogui.sleep(2)
+
+    # Start Test
+    element = browser.find_element(By.XPATH, "/html/body/div/div/div[4]/div[1]/div/div/div/div[4]/button")
+    element.click()
+
+    seenWords = []
+    for _ in range(int(targetScore)):
+        # Get the word shown
+        page_source = browser.page_source
+        soup = BeautifulSoup(page_source, 'html.parser')
+        word = soup.find(class_='word')
+
+        elements = browser.find_elements(By.TAG_NAME, "Button")
+        # Check if word has been seen
+        if word in seenWords:
+            elements[1].click()
+        else:
+            elements[2].click()
+            # Add word to seen list if it's a new word
+            seenWords.append(word)
+
+
 if __name__ == '__main__':
     pyautogui.PAUSE = .001
     browser = webdriver.Firefox()
@@ -156,6 +185,7 @@ if __name__ == '__main__':
         print("\t2: Sequence Memory")
         print("\t3: Aim Trainer")
         print("\t4: Number Memory")
+        print("\t5: Verbal Memory")
         userInput = input("> ")
 
         match userInput:
@@ -167,3 +197,5 @@ if __name__ == '__main__':
                 aimTrainer()
             case "4":
                 numberMemory()
+            case "5":
+                verbalMemory()
