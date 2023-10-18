@@ -7,25 +7,27 @@ from bs4 import BeautifulSoup
 
 # Does the reaction test
 def reaction():
-    browser = webdriver.Firefox()
-    url = "https://humanbenchmark.com/tests/reactiontime"
-    browser.get(url)
-    pyautogui.sleep(10)
+    browser.get("https://humanbenchmark.com/tests/reactiontime")
+    pyautogui.sleep(2)
 
+    # Start game
     background = browser.find_element(By.CLASS_NAME, "view-splash")
     background.click()
 
-    for _ in range(5):
+    for i in range(5):
         while True:
             try:
+                # Find and click the background if its green
                 background = browser.find_element(By.CLASS_NAME, "view-go")
                 background.click()
                 pyautogui.sleep(.1)
-                background = browser.find_element(By.CLASS_NAME, "view-result")
-                background.click()
                 break
             except exceptions.NoSuchElementException:
                 pass
+        # If it's not the last round, start the next round
+        if i < 4:
+            background = browser.find_element(By.CLASS_NAME, "view-result")
+            background.click()
 
 
 # Does sequence memory up to the user specified amount
@@ -33,11 +35,8 @@ def sequenceMemory():
     print("What score do you want to stop at?")
     targetScore = input("> ")
 
-    # Open browser
-    browser = webdriver.Firefox()
-    url = "https://humanbenchmark.com/tests/sequence"
-    browser.get(url)
-    pyautogui.sleep(6)
+    browser.get("https://humanbenchmark.com/tests/sequence")
+    pyautogui.sleep(2)
 
     # Click start button
     element = browser.find_element(By.XPATH, "/html/body/div/div/div[4]/div[1]/div/div/div/div[2]/button")
@@ -71,13 +70,11 @@ def sequenceMemory():
 
 
 # Starts aimTrainer 5 seconds after being called
+# The window has to be in focus for aim trainer
 def aimTrainer():
-    pyautogui.sleep(5)
-    # Make sure Aim Trainer is probably open
-    if not pyautogui.pixelMatchesColor(965, 480, (149, 195, 232)):
-        print("Aim Trainer not detected")
-        pyautogui.sleep(2)
-        return
+    browser.get("https://humanbenchmark.com/tests/aim")
+    browser.maximize_window()
+    pyautogui.sleep(2)
 
     # Start game
     pyautogui.click(950, 500)
@@ -104,17 +101,16 @@ def aimTrainer():
                 xValue = 0
                 yValue += 9
 
+    browser.minimize_window()
+
 
 # Plays number memory up to user specified amount
 def numberMemory():
     print("What score do you want to stop at?")
     targetScore = input("> ")
 
-    # Open a selenium browser to the test
-    browser = webdriver.Firefox()
-    url = "https://humanbenchmark.com/tests/number-memory"
-    browser.get(url)
-    pyautogui.sleep(10)
+    browser.get("https://humanbenchmark.com/tests/number-memory")
+    pyautogui.sleep(2)
 
     # Start Test
     element = browser.find_element(By.XPATH, "/html/body/div/div/div[4]/div[1]/div/div/div/div[3]/button")
@@ -149,6 +145,9 @@ def numberMemory():
 
 if __name__ == '__main__':
     pyautogui.PAUSE = .001
+    browser = webdriver.Firefox()
+    browser.minimize_window()
+    browser.get("https://humanbenchmark.com/")
 
     while True:
         print("Human Benchmark Tests\n")
