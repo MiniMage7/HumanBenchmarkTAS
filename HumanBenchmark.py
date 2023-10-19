@@ -246,6 +246,26 @@ def visualMemory():
             square.click()
 
 
+# Does the typing test
+def typing():
+    browser.get("https://humanbenchmark.com/tests/typing")
+    pyautogui.sleep(2)
+
+    # Grab all the letters to type
+    page_source = browser.page_source
+    soup = BeautifulSoup(page_source, 'html.parser')
+    characters = soup.find_all(class_='incomplete')
+
+    # Combine them into a string
+    stringToType = ''
+    for char in characters:
+        stringToType += char.get_text()
+
+    # Type the string
+    typingBox = browser.find_element(By.CLASS_NAME, "letters")
+    typingBox.send_keys(stringToType)
+
+
 if __name__ == '__main__':
     pyautogui.PAUSE = .001
     print("Opening browser")
@@ -264,6 +284,7 @@ if __name__ == '__main__':
         print("\t5: Verbal Memory")
         print("\t6: Chimp Test")
         print("\t7: Visual Memory")
+        print("\t8: Typing")
         userInput = input("> ")
 
         match userInput:
@@ -281,3 +302,5 @@ if __name__ == '__main__':
                 chimpTest()
             case "7":
                 visualMemory()
+            case "8":
+                typing()
