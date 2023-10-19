@@ -172,8 +172,50 @@ def verbalMemory():
             seenWords.append(word)
 
 
+# Plays verbal memory up to user specified score
+def chimpTest():
+    print("How many numbers do you want to go to?")
+    targetScore = input("> ")
+    targetScore = int(targetScore)
+
+    browser.get("https://humanbenchmark.com/tests/chimp")
+    pyautogui.sleep(2)
+
+    # Start Test
+    element = browser.find_element(By.XPATH, "/html/body/div/div/div[4]/div[1]/div/div[1]/div[2]/button")
+    element.click()
+
+    for i in range(4, targetScore):
+        pyautogui.sleep(.1)
+        # Get a list of all numbered buttons
+        buttons = browser.find_elements(By.CLASS_NAME, "css-19b5rdt")
+        buttonsPushed = 0
+        listIndex = 0
+        # This loop goes until all buttons have been pushed
+        while buttonsPushed < i:
+            # This keeps going through the list of potential buttons,
+            # hitting them if they're next, and then removing them from the list
+            if int(buttons[listIndex].get_attribute("data-cellnumber")) == buttonsPushed + 1:
+                # When the next button is found, click it and remove it from the list
+                buttons[listIndex].click()
+                del buttons[listIndex]
+                buttonsPushed += 1
+                listIndex = 0
+                continue
+            else:
+                # Check the next number in the list
+                listIndex += 1
+
+        # Go to next round
+        pyautogui.sleep(.1)
+        buttonObjects = browser.find_elements(By.TAG_NAME, "button")
+        buttonObjects[1].click()
+
+
 if __name__ == '__main__':
     pyautogui.PAUSE = .001
+    print("Opening browser")
+
     browser = webdriver.Firefox()
     browser.minimize_window()
     browser.get("https://humanbenchmark.com/")
@@ -186,6 +228,7 @@ if __name__ == '__main__':
         print("\t3: Aim Trainer")
         print("\t4: Number Memory")
         print("\t5: Verbal Memory")
+        print("\t6: Chimp Test")
         userInput = input("> ")
 
         match userInput:
@@ -199,3 +242,5 @@ if __name__ == '__main__':
                 numberMemory()
             case "5":
                 verbalMemory()
+            case "6":
+                chimpTest()
