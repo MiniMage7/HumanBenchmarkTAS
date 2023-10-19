@@ -212,6 +212,40 @@ def chimpTest():
         buttonObjects[1].click()
 
 
+# Plays visual memory up to user specified score
+def visualMemory():
+    print("What score do you want to stop at?")
+    targetScore = input("> ")
+
+    browser.get("https://humanbenchmark.com/tests/memory")
+    pyautogui.sleep(2)
+
+    # Start Test
+    element = browser.find_element(By.XPATH, "/html/body/div/div/div[4]/div[1]/div/div/div/div[2]/button")
+    element.click()
+
+    for _ in range(int(targetScore)):
+        # Wait until there is an active square
+        pyautogui.sleep(.3)
+        activeElements = []
+        while len(activeElements) < 2:
+            activeElements = browser.find_elements(By.CLASS_NAME, "active")
+
+        # Grab a list of all the active elements
+        activeSquares = browser.find_elements(By.CLASS_NAME, "active")
+        # The first element isn't a square
+        del activeSquares[0]
+
+        # Wait until the active squares fade
+        while len(activeElements) > 2:
+            activeElements = browser.find_elements(By.CLASS_NAME, "active")
+
+        pyautogui.sleep(.3)
+        # Click all the squares
+        for square in activeSquares:
+            square.click()
+
+
 if __name__ == '__main__':
     pyautogui.PAUSE = .001
     print("Opening browser")
@@ -229,6 +263,7 @@ if __name__ == '__main__':
         print("\t4: Number Memory")
         print("\t5: Verbal Memory")
         print("\t6: Chimp Test")
+        print("\t7: Visual Memory")
         userInput = input("> ")
 
         match userInput:
@@ -244,3 +279,5 @@ if __name__ == '__main__':
                 verbalMemory()
             case "6":
                 chimpTest()
+            case "7":
+                visualMemory()
