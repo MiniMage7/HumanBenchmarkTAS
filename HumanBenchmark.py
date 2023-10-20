@@ -69,10 +69,11 @@ def sequenceMemory():
             square.click()
 
 
-# Starts aimTrainer 5 seconds after being called
+# Does the aim trainer test
 # The window has to be in focus for aim trainer
 def aimTrainer():
     browser.get("https://humanbenchmark.com/tests/aim")
+    browser.minimize_window()
     browser.maximize_window()
     pyautogui.sleep(2)
 
@@ -82,7 +83,7 @@ def aimTrainer():
     count = 0
     while True:
         ss = pyautogui.screenshot(region=(350, 250, 1200, 500))
-        # Check if game is over 930, 710
+        # Check if game is over
         if ss.getpixel((580, 460)) == (255, 209, 84):
             break
 
@@ -97,7 +98,7 @@ def aimTrainer():
 
             # Move to another spot on the screen
             xValue += 9
-            if xValue > 1200:
+            if xValue >= 1200:
                 xValue = 0
                 yValue += 9
 
@@ -172,12 +173,8 @@ def verbalMemory():
             seenWords.append(word)
 
 
-# Plays verbal memory up to user specified score
+# Plays verbal memory up to 41 (the max score)
 def chimpTest():
-    print("How many numbers do you want to go to?")
-    targetScore = input("> ")
-    targetScore = int(targetScore)
-
     browser.get("https://humanbenchmark.com/tests/chimp")
     pyautogui.sleep(2)
 
@@ -185,7 +182,7 @@ def chimpTest():
     element = browser.find_element(By.XPATH, "/html/body/div/div/div[4]/div[1]/div/div[1]/div[2]/button")
     element.click()
 
-    for i in range(4, targetScore):
+    for i in range(4, 41):
         pyautogui.sleep(.1)
         # Get a list of all numbered buttons
         buttons = browser.find_elements(By.CLASS_NAME, "css-19b5rdt")
@@ -208,8 +205,9 @@ def chimpTest():
 
         # Go to next round
         pyautogui.sleep(.1)
-        buttonObjects = browser.find_elements(By.TAG_NAME, "button")
-        buttonObjects[1].click()
+        if i != 40:
+            buttonObjects = browser.find_elements(By.TAG_NAME, "button")
+            buttonObjects[1].click()
 
 
 # Plays visual memory up to user specified score
@@ -270,6 +268,7 @@ if __name__ == '__main__':
     pyautogui.PAUSE = .001
     print("Opening browser")
 
+    # Open a selenium browser
     browser = webdriver.Firefox()
     browser.minimize_window()
     browser.get("https://humanbenchmark.com/")
