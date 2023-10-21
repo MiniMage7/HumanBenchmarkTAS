@@ -7,18 +7,18 @@ from bs4 import BeautifulSoup
 
 # Does the reaction test
 def reaction():
-    browser.get("https://humanbenchmark.com/tests/reactiontime")
+    browser.get('https://humanbenchmark.com/tests/reactiontime')
     pyautogui.sleep(2)
 
     # Start game
-    background = browser.find_element(By.CLASS_NAME, "view-splash")
+    background = browser.find_element(By.CLASS_NAME, 'view-splash')
     background.click()
 
     for i in range(5):
         while True:
             try:
                 # Find and click the background if its green
-                background = browser.find_element(By.CLASS_NAME, "view-go")
+                background = browser.find_element(By.CLASS_NAME, 'view-go')
                 background.click()
                 pyautogui.sleep(.1)
                 break
@@ -26,35 +26,35 @@ def reaction():
                 pass
         # If it's not the last round, start the next round
         if i < 4:
-            background = browser.find_element(By.CLASS_NAME, "view-result")
+            background = browser.find_element(By.CLASS_NAME, 'view-result')
             background.click()
 
 
 # Does sequence memory up to the user specified amount
 def sequenceMemory():
-    print("What score do you want to stop at?")
-    targetScore = input("> ")
+    print('What score do you want to stop at?')
+    targetScore = input('> ')
 
-    browser.get("https://humanbenchmark.com/tests/sequence")
+    browser.get('https://humanbenchmark.com/tests/sequence')
     pyautogui.sleep(2)
 
     # Click start button
-    element = browser.find_element(By.XPATH, "/html/body/div/div/div[4]/div[1]/div/div/div/div[2]/button")
+    element = browser.find_element(By.XPATH, '/html/body/div/div/div[4]/div[1]/div/div/div/div[2]/button')
     element.click()
 
     # Loops for user specified amount of rounds
-    for i in range(1, int(targetScore) + 1):
+    for i in range(1, int(targetScore)):
         squareList = []
         moveCount = 0
         while moveCount < i:
             while True:
                 try:
-                    activeEntities = browser.find_elements(By.CLASS_NAME, "active")
+                    activeEntities = browser.find_elements(By.CLASS_NAME, 'active')
 
                     # Check to make sure it's a different active square
                     if len(squareList) > 0:
                         while activeEntities[1] == squareList[-1]:
-                            activeEntities = browser.find_elements(By.CLASS_NAME, "active")
+                            activeEntities = browser.find_elements(By.CLASS_NAME, 'active')
 
                     # Add the square to a list to be clicked later
                     squareList.append(activeEntities[1])
@@ -72,7 +72,7 @@ def sequenceMemory():
 # Does the aim trainer test
 # The window has to be in focus for aim trainer
 def aimTrainer():
-    browser.get("https://humanbenchmark.com/tests/aim")
+    browser.get('https://humanbenchmark.com/tests/aim')
     browser.minimize_window()
     browser.maximize_window()
     pyautogui.sleep(2)
@@ -107,18 +107,18 @@ def aimTrainer():
 
 # Plays number memory up to user specified amount
 def numberMemory():
-    print("What score do you want to stop at?")
-    targetScore = input("> ")
+    print('What score do you want to stop at?')
+    targetScore = input('> ')
 
-    browser.get("https://humanbenchmark.com/tests/number-memory")
+    browser.get('https://humanbenchmark.com/tests/number-memory')
     pyautogui.sleep(2)
 
     # Start Test
-    element = browser.find_element(By.XPATH, "/html/body/div/div/div[4]/div[1]/div/div/div/div[3]/button")
+    element = browser.find_element(By.XPATH, '/html/body/div/div/div[4]/div[1]/div/div/div/div[3]/button')
     element.click()
 
     # Loop of Number Memory
-    for _ in range(int(targetScore)):
+    for _ in range(int(targetScore) - 1):
         # Grab number
         pyautogui.sleep(1)
         page_source = browser.page_source
@@ -130,7 +130,7 @@ def numberMemory():
         inputBox = None
         while not boxFound:
             try:
-                inputBox = browser.find_element(By.TAG_NAME, "input")
+                inputBox = browser.find_element(By.TAG_NAME, 'input')
                 boxFound = True
             except exceptions.NoSuchElementException:
                 pass
@@ -140,20 +140,20 @@ def numberMemory():
         inputBox.send_keys(webdriver.Keys.RETURN)
 
         # Hit next for the next number
-        elements = browser.find_elements(By.TAG_NAME, "Button")
+        elements = browser.find_elements(By.TAG_NAME, 'Button')
         elements[1].click()
 
 
 # Plays verbal memory up to user specified amount
 def verbalMemory():
-    print("What score do you want to stop at?")
-    targetScore = input("> ")
+    print('What score do you want to stop at?')
+    targetScore = input('> ')
 
-    browser.get("https://humanbenchmark.com/tests/verbal-memory")
+    browser.get('https://humanbenchmark.com/tests/verbal-memory')
     pyautogui.sleep(2)
 
     # Start Test
-    element = browser.find_element(By.XPATH, "/html/body/div/div/div[4]/div[1]/div/div/div/div[4]/button")
+    element = browser.find_element(By.XPATH, '/html/body/div/div/div[4]/div[1]/div/div/div/div[4]/button')
     element.click()
 
     seenWords = []
@@ -163,7 +163,7 @@ def verbalMemory():
         soup = BeautifulSoup(page_source, 'html.parser')
         word = soup.find(class_='word')
 
-        elements = browser.find_elements(By.TAG_NAME, "Button")
+        elements = browser.find_elements(By.TAG_NAME, 'Button')
         # Check if word has been seen
         if word in seenWords:
             elements[1].click()
@@ -175,24 +175,24 @@ def verbalMemory():
 
 # Plays verbal memory up to 41 (the max score)
 def chimpTest():
-    browser.get("https://humanbenchmark.com/tests/chimp")
+    browser.get('https://humanbenchmark.com/tests/chimp')
     pyautogui.sleep(2)
 
     # Start Test
-    element = browser.find_element(By.XPATH, "/html/body/div/div/div[4]/div[1]/div/div[1]/div[2]/button")
+    element = browser.find_element(By.XPATH, '/html/body/div/div/div[4]/div[1]/div/div[1]/div[2]/button')
     element.click()
 
     for i in range(4, 41):
         pyautogui.sleep(.1)
         # Get a list of all numbered buttons
-        buttons = browser.find_elements(By.CLASS_NAME, "css-19b5rdt")
+        buttons = browser.find_elements(By.CLASS_NAME, 'css-19b5rdt')
         buttonsPushed = 0
         listIndex = 0
         # This loop goes until all buttons have been pushed
         while buttonsPushed < i:
             # This keeps going through the list of potential buttons,
             # hitting them if they're next, and then removing them from the list
-            if int(buttons[listIndex].get_attribute("data-cellnumber")) == buttonsPushed + 1:
+            if int(buttons[listIndex].get_attribute('data-cellnumber')) == buttonsPushed + 1:
                 # When the next button is found, click it and remove it from the list
                 buttons[listIndex].click()
                 del buttons[listIndex]
@@ -206,37 +206,37 @@ def chimpTest():
         # Go to next round
         pyautogui.sleep(.1)
         if i != 40:
-            buttonObjects = browser.find_elements(By.TAG_NAME, "button")
+            buttonObjects = browser.find_elements(By.TAG_NAME, 'button')
             buttonObjects[1].click()
 
 
 # Plays visual memory up to user specified score
 def visualMemory():
-    print("What score do you want to stop at?")
-    targetScore = input("> ")
+    print('What score do you want to stop at?')
+    targetScore = input('> ')
 
-    browser.get("https://humanbenchmark.com/tests/memory")
+    browser.get('https://humanbenchmark.com/tests/memory')
     pyautogui.sleep(2)
 
     # Start Test
-    element = browser.find_element(By.XPATH, "/html/body/div/div/div[4]/div[1]/div/div/div/div[2]/button")
+    element = browser.find_element(By.XPATH, '/html/body/div/div/div[4]/div[1]/div/div/div/div[2]/button')
     element.click()
 
-    for _ in range(int(targetScore)):
+    for _ in range(int(targetScore) - 1):
         # Wait until there is an active square
         pyautogui.sleep(.3)
         activeElements = []
         while len(activeElements) < 2:
-            activeElements = browser.find_elements(By.CLASS_NAME, "active")
+            activeElements = browser.find_elements(By.CLASS_NAME, 'active')
 
         # Grab a list of all the active elements
-        activeSquares = browser.find_elements(By.CLASS_NAME, "active")
+        activeSquares = browser.find_elements(By.CLASS_NAME, 'active')
         # The first element isn't a square
         del activeSquares[0]
 
         # Wait until the active squares fade
         while len(activeElements) > 2:
-            activeElements = browser.find_elements(By.CLASS_NAME, "active")
+            activeElements = browser.find_elements(By.CLASS_NAME, 'active')
 
         pyautogui.sleep(.3)
         # Click all the squares
@@ -246,7 +246,7 @@ def visualMemory():
 
 # Does the typing test
 def typing():
-    browser.get("https://humanbenchmark.com/tests/typing")
+    browser.get('https://humanbenchmark.com/tests/typing')
     pyautogui.sleep(2)
 
     # Grab all the letters to type
@@ -260,46 +260,46 @@ def typing():
         stringToType += char.get_text()
 
     # Type the string
-    typingBox = browser.find_element(By.CLASS_NAME, "letters")
+    typingBox = browser.find_element(By.CLASS_NAME, 'letters')
     typingBox.send_keys(stringToType)
 
 
 if __name__ == '__main__':
     pyautogui.PAUSE = .001
-    print("Opening browser")
+    print('Opening browser')
 
     # Open a selenium browser
     browser = webdriver.Firefox()
     browser.minimize_window()
-    browser.get("https://humanbenchmark.com/")
+    browser.get('https://humanbenchmark.com/')
 
     while True:
-        print("Human Benchmark Tests\n")
-        print("Select your test:")
-        print("\t1: Reaction")
-        print("\t2: Sequence Memory")
-        print("\t3: Aim Trainer")
-        print("\t4: Number Memory")
-        print("\t5: Verbal Memory")
-        print("\t6: Chimp Test")
-        print("\t7: Visual Memory")
-        print("\t8: Typing")
-        userInput = input("> ")
+        print('Human Benchmark Tests\n')
+        print('Select your test:')
+        print('\t1: Reaction')
+        print('\t2: Sequence Memory')
+        print('\t3: Aim Trainer')
+        print('\t4: Number Memory')
+        print('\t5: Verbal Memory')
+        print('\t6: Chimp Test')
+        print('\t7: Visual Memory')
+        print('\t8: Typing')
+        userInput = input('> ')
 
         match userInput:
-            case "1":
+            case '1':
                 reaction()
-            case "2":
+            case '2':
                 sequenceMemory()
-            case "3":
+            case '3':
                 aimTrainer()
-            case "4":
+            case '4':
                 numberMemory()
-            case "5":
+            case '5':
                 verbalMemory()
-            case "6":
+            case '6':
                 chimpTest()
-            case "7":
+            case '7':
                 visualMemory()
-            case "8":
+            case '8':
                 typing()
